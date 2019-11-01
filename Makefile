@@ -6,12 +6,12 @@ FOLDER_NAME=\allegro-$(ALLEGRO_VERSION)-mingw-$(MINGW_VERSION)
 PATH_ALLEGRO=$(FOLDER)$(FOLDER_NAME)
 LIB_ALLEGRO=\lib\liballegro-$(ALLEGRO_VERSION)-monolith-mt.a
 INCLUDE_ALLEGRO=\include
-O_FLAGS=main.o	entidade.o	game.o	menu.o	player.o	Base.o	Instance.o	Zelda.o
+O_FLAGS=main.o	entidade.o	game.o	menu.o	player.o	Base.o	Instance.o
 
-all:	main
+all:	a.exe
 
-main:	$(O_FLAGS)
-	g++	$(O_FLAGS)	-o	main	$(PATH_ALLEGRO)$(LIB_ALLEGRO)
+a.exe:	$(O_FLAGS)
+	g++	-o a.exe $(O_FLAGS)	$(PATH_ALLEGRO)$(LIB_ALLEGRO)
 
 main.o:	main.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	main.cpp
@@ -34,5 +34,12 @@ Base.o:	Base.cpp
 Instance.o:	Instance.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	Instance.cpp
 
-Zelda.o:	Zelda.cpp
-	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	Zelda.cpp
+
+clean:
+	del Base.o
+	del Instance.o
+	del player.o
+	del menu.o
+	del game.o
+	del entidade.o
+	del main.o
