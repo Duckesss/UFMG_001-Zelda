@@ -13,4 +13,3 @@ User stories
 -Eu como jogador melhoro meus itens
 
 -Eu como jogador, encontrarei diferentes dificuldades ao longo do jogo
-

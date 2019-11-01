@@ -11,4 +11,3 @@ Entidade::Entidade(string sprite,coordenadas posicao, int dano, int vida, int id
     this->vida = vida;
     this->id = id;
 }
-

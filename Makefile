@@ -15,24 +15,24 @@ main:	$(O_FLAGS)
 
 main.o:	main.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	main.cpp
-	
+
 entidade.o:	entidade.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	entidade.cpp
-	
+
 game.o:	game.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	game.cpp
-	
+
 menu.o:	menu.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	menu.cpp
-	
+
 player.o:	player.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	player.cpp
-	
+
 Base.o:	Base.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	Base.cpp
-	
+
 Instance.o:	Instance.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	Instance.cpp
-	
+
 Zelda.o:	Zelda.cpp
 	g++	-I	$(PATH_ALLEGRO)$(INCLUDE_ALLEGRO)	-c	Zelda.cpp
