@@ -1,11 +1,14 @@
-#include "Player.h"
+#include "player.h"
 
-Player::Player()
-{
+Player::Player(string sprite,coordenadas posicao, int dano, int vida, int id)
+:Entidade(sprite,posicao, dano, vida, id){
     //ctor
 }
 
-Player::~Player()
-{
-    //dtor
+void Player::mover(int x, int y){
+
+}
+
+void Player::ataque(){
+
 }
