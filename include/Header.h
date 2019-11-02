@@ -66,18 +66,8 @@ class Entity{
     public:
 
         Hitbox hitbox;
-        int hp;
+        int health;
         std::vector<ALLEGRO_BITMAP*> sprite;
-
-        virtual MoveU();
-        virtual MoveD();
-        virtual MoveR();
-        virtual MoveL();
-        virtual Attack();
-        virtual Damage();
-
-        Load(std::string);
-        ~Entity();
 
 };
 
@@ -85,16 +75,11 @@ class Player: public Entity{
 
     public:
 
-        int save;
+        int max_health;
+        int i, j;
+        char name[8];
 
         Load(std::string);
-        MoveU();
-        MoveD();
-        MoveR();
-        MoveL();
-        Attack();
-        Damage();
-
 
 };
 

@@ -77,6 +77,11 @@ Instance::StartMenu(Game* game)
 
     }
 
+    Player test;
+
+    test.Load(".\\entities\\save_0.txt");
+
+
 }
 
 Instance::FileMenu(Game* game)

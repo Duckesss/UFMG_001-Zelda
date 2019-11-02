@@ -1,0 +1,5 @@
+name = link
+max_health = 5
+health = 3
+hitbox = 0, 0
+zone = 1, 2
