@@ -14,6 +14,9 @@
 #include <cstdio>
 #include <fstream>
 #include <string>
+#include <conio.h>
+#include <stdio.h>
+
 
 typedef struct Hitbox{
 
@@ -21,8 +24,29 @@ typedef struct Hitbox{
 
 }Hitbox;
 
-class Game
-{
+class Entity{
+
+    public:
+
+        Hitbox hitbox;
+        int health;
+        std::vector<ALLEGRO_BITMAP*> sprite;
+
+};
+
+class Player: public Entity{
+
+    public:
+
+        int i, j;
+        char name[8];
+        int registered;
+
+        Load(std::string);
+
+};
+
+class Game{
     public:
 
         bool playing;
@@ -31,6 +55,8 @@ class Game
         ALLEGRO_EVENT_QUEUE* q;
         ALLEGRO_TIMER* t;
         ALLEGRO_EVENT ev;
+        Player player;
+        ALLEGRO_FONT* f;
 
         InitCheck();
 
@@ -39,8 +65,7 @@ class Game
 
 };
 
-class Instance
-{
+class Instance{
     public:
 
         ALLEGRO_BITMAP* strt_background[3];
@@ -58,29 +83,10 @@ class Instance
         RegisterMenu(Game*);
         EliminationMenu(Game*);
         MainGame(Game*);
+        Register(Game*, std::string, int);
 
 };
 
-class Entity{
 
-    public:
-
-        Hitbox hitbox;
-        int health;
-        std::vector<ALLEGRO_BITMAP*> sprite;
-
-};
-
-class Player: public Entity{
-
-    public:
-
-        int max_health;
-        int i, j;
-        char name[8];
-
-        Load(std::string);
-
-};
 
 #endif

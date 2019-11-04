@@ -20,6 +20,7 @@ Game::Game()
     d = al_create_display(768,672);
     q = al_create_event_queue();
     t = al_create_timer(1.0/30);
+    f = al_load_ttf_font(".\\assets\\font.ttf", 24, 0);
 
     al_register_event_source(q, al_get_keyboard_event_source());
 	al_register_event_source(q, al_get_display_event_source(d));

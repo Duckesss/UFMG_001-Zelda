@@ -261,7 +261,7 @@
 1372628331 c:\allegro-5.0.10-mingw-4.7.0\include\allegro5\allegro_primitives.h
 	<allegro5/allegro.h>
 
-1572555220 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\game.cpp
+1572742056 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\game.cpp
 	"Header.h"
 
 1572467352 c:\users\usuário\desktop\pdsii\cblocks\zelda\include\game.h
@@ -284,10 +284,10 @@
 	<allegro5/allegro_primitives.h>
 	"Game.h"
 
-1572658693 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\instance.cpp
+1572841140 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\instance.cpp
 	"Header.h"
 
-1572658790 c:\users\usuário\desktop\pdsii\cblocks\zelda\include\header.h
+1572830426 c:\users\usuário\desktop\pdsii\cblocks\zelda\include\header.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_image.h>
 	<allegro5/allegro_font.h>
@@ -300,12 +300,14 @@
 	<cstdio>
 	<fstream>
 	<string>
+	<conio.h>
+	<stdio.h>
 
 1572556461 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\zone.cpp
 
 1572658800 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\entity.cpp
 	"Header.h"
 
-1572658687 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\player.cpp
+1572829453 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\player.cpp
 	"Header.h"
 
