@@ -372,9 +372,9 @@ Instance::EliminationMenu(Game* game)
 
     int x, i;
 
-    if(save[2].registered == 1){x = 0;}
-    else if (save[1].registered == 1) {x = 1;}
-    else if (save[0].registered == 1) {x = 2;}
+    if(save[2].registered == 1){PosMemo = 0;}
+    else if (save[1].registered == 1) {PosMemo = 1;}
+    else if (save[0].registered == 1) {PosMemo = 2;}
 
     while(game->playing){
 
@@ -386,9 +386,9 @@ Instance::EliminationMenu(Game* game)
 
             if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
 
-                if (x == 3) {FileMenu(game);}
+                if (PosMemo == 3) {FileMenu(game);}
 
-                else if (x == 0){
+                else if (PosMemo == 0){
 
                     std::ofstream save;
                     save.open(".\\entities\\save_0.txt");
@@ -403,7 +403,7 @@ Instance::EliminationMenu(Game* game)
 
                 }
 
-                else if (x == 1){
+                else if (PosMemo == 1){
 
                     std::ofstream save;
                     save.open(".\\entities\\save_1.txt");
@@ -418,7 +418,7 @@ Instance::EliminationMenu(Game* game)
 
                 }
 
-                else if (x == 2){
+                else if (PosMemo == 2){
 
                     std::ofstream save;
                     save.open(".\\entities\\save_2.txt");
@@ -437,37 +437,37 @@ Instance::EliminationMenu(Game* game)
                 save[1].Load(".\\entities\\save_1.txt");
                 save[2].Load(".\\entities\\save_2.txt");
 
-                if(save[0].registered == 1){x = 0;}
-                else if (save[1].registered == 1) {x = 1;}
-                else if (save[2].registered == 1) {x = 2;}
-                else {x = 3;}
+                if(save[0].registered == 1){PosMemo = 0;}
+                else if (save[1].registered == 1) {PosMemo = 1;}
+                else if (save[2].registered == 1) {PosMemo = 2;}
+                else {PosMemo = 3;}
 
             }
 
             if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){
 
-                if(x == 0) {
+                if(PosMemo == 0) {
 
-                    if (save[1].registered == 1) {x = 1;}
-                    else if (save[2].registered == 1) {x = 2;}
-                    else {x = 3;}
-
-                }
-
-                else if(x == 1) {
-
-                    if (save[2].registered == 1) {x = 2;}
-                    else {x = 3;}
+                    if (save[1].registered == 1) {PosMemo = 1;}
+                    else if (save[2].registered == 1) {PosMemo = 2;}
+                    else {PosMemo = 3;}
 
                 }
 
-                else if(x == 2) {x = 3;}
+                else if(PosMemo == 1) {
 
-                else if(x == 3){
+                    if (save[2].registered == 1) {PosMemo = 2;}
+                    else {PosMemo = 3;}
 
-                    if(save[0].registered == 1){x = 0;}
-                    else if (save[1].registered == 1) {x = 1;}
-                    else if (save[2].registered == 1) {x = 2;}
+                }
+
+                else if(PosMemo == 2) {PosMemo = 3;}
+
+                else if(PosMemo == 3){
+
+                    if(save[0].registered == 1){PosMemo = 0;}
+                    else if (save[1].registered == 1) {PosMemo = 1;}
+                    else if (save[2].registered == 1) {PosMemo = 2;}
 
                 }
 
@@ -476,29 +476,29 @@ Instance::EliminationMenu(Game* game)
             if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){
 
 
-                if(x == 0) {x = 3;}
+                if(PosMemo == 0) {PosMemo = 3;}
 
-                else if(x == 1) {
+                else if(PosMemo == 1) {
 
-                    if(save[0].registered == 1) {x = 0;}
-                    else {x = 3;}
-
-                }
-
-                else if(x == 2){
-
-                    if (save[1].registered == 1) {x = 1;}
-                    else if(save[0].registered == 1) {x = 0;}
-                    else {x = 3;}
+                    if(save[0].registered == 1) {PosMemo = 0;}
+                    else {PosMemo = 3;}
 
                 }
 
-                else if(x == 3){
+                else if(PosMemo == 2){
 
-                    if (save[2].registered == 1) {x = 2;}
-                    else if (save[1].registered == 1) {x = 1;}
-                    else if(save[0].registered == 1) {x = 0;}
-                    else {x = 3;}
+                    if (save[1].registered == 1) {PosMemo = 1;}
+                    else if(save[0].registered == 1) {PosMemo = 0;}
+                    else {PosMemo = 3;}
+
+                }
+
+                else if(PosMemo == 3){
+
+                    if (save[2].registered == 1) {PosMemo = 2;}
+                    else if (save[1].registered == 1) {PosMemo = 1;}
+                    else if(save[0].registered == 1) {PosMemo = 0;}
+                    else {PosMemo = 3;}
 
                 }
 
@@ -511,7 +511,7 @@ Instance::EliminationMenu(Game* game)
         if(game->ev.type == ALLEGRO_EVENT_TIMER){
 
             al_draw_bitmap(elimination_background, 0, 0, 0);
-            al_draw_bitmap(heart, 201, x*72 + 120, 0);
+            al_draw_bitmap(heart, 201, PosMemo*72 + 120, 0);
 
             for(i = 0; i<3; i++){
 
