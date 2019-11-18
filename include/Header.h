@@ -66,6 +66,13 @@ class Game{
 };
 
 class Instance{
+    private:
+        ALLEGRO_BITMAP* dark_background;
+        ALLEGRO_BITMAP* zelda_sprites[8];
+        quitGame(Game* game,int hasEventQueue);
+        att_heartX(int &heartX,int posicao,Player save[], int decrease);
+        dicionario_heartX(int &heartX, int coordenadas);
+       gameLoop(Game* game);
     public:
 
         ALLEGRO_BITMAP* strt_background[3];

@@ -1,5 +1,5 @@
 registered = 1
-name = Xablau
+name = jo
 health = 3
 hitbox = 0, 0
 zone = 1, 2

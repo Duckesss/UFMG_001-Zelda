@@ -344,3 +344,39 @@
 1572657622 source:d:\estudo\__ufmg\semestre 2\pds 2\github\ufmg_001-zelda\zelda.cpp
 	"Header.h"
 
+1574036229 source:c:\development\ufmg_001-zelda\src\base.cpp
+	"Header.h"
+
+1574052241 c:\development\ufmg_001-zelda\include\header.h
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_acodec.h>
+	<allegro5/allegro_primitives.h>
+	<iostream>
+	<vector>
+	<cstdio>
+	<fstream>
+	<string>
+	<conio.h>
+	<stdio.h>
+
+1574036229 source:c:\development\ufmg_001-zelda\src\entity.cpp
+	"Header.h"
+
+1574036229 source:c:\development\ufmg_001-zelda\src\game.cpp
+	"Header.h"
+
+1574036229 source:c:\development\ufmg_001-zelda\src\player.cpp
+	"Header.h"
+
+1574036229 source:c:\development\ufmg_001-zelda\src\zone.cpp
+
+1574036229 source:c:\development\ufmg_001-zelda\zelda.cpp
+	"Header.h"
+
+1574054025 source:c:\development\ufmg_001-zelda\src\instance.cpp
+	"Header.h"
+

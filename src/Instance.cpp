@@ -2,18 +2,26 @@
 
 Instance::Instance()
 {
-
     strt_background[0] = al_load_bitmap(".\\assets\\strt_background_0.png");
     strt_background[1] = al_load_bitmap(".\\assets\\strt_background_1.png");
     strt_background[2] = al_load_bitmap(".\\assets\\strt_background_2.png");
 
     load_background = al_load_bitmap(".\\assets\\load_background.png");
+
+    dark_background = al_load_bitmap(".\\assets\\darkbackground.png");
+
+    zelda_sprites[0] = al_load_bitmap(".\\assets\\movimentacao\\zelda0.png");
+    zelda_sprites[1] = al_load_bitmap(".\\assets\\movimentacao\\zelda1.png");
+    zelda_sprites[2] = al_load_bitmap(".\\assets\\movimentacao\\zelda2.png");
+    zelda_sprites[3] = al_load_bitmap(".\\assets\\movimentacao\\zelda3.png");
+    zelda_sprites[4] = al_load_bitmap(".\\assets\\movimentacao\\zelda4.png");
+    zelda_sprites[5] = al_load_bitmap(".\\assets\\movimentacao\\zelda5.png");
+    zelda_sprites[6] = al_load_bitmap(".\\assets\\movimentacao\\zelda6.png");
+    zelda_sprites[7] = al_load_bitmap(".\\assets\\movimentacao\\zelda7.png");
+
     register_background = al_load_bitmap(".\\assets\\register_background.png");
     elimination_background = al_load_bitmap(".\\assets\\elimination_background.png");
-
     heart = al_load_bitmap(".\\assets\\heart.png");
-
-
 }
 
 Instance::~Instance()
@@ -31,223 +39,140 @@ Instance::~Instance()
 
 Instance::StartMenu(Game* game)
 {
-
     int i = 0;
-
     std::cout << "Starting Menu..." << std::endl;
-
     while(game->playing){
-
         al_wait_for_event(game->q, &game->ev);
-
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-
-			game->playing = false;
-
-		}
-
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
-
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
-
-                game->playing = false;
-
-            }
-
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
-
-                FileMenu(game);
-
-                break;
-
-            }
-
+        this->quitGame(game,1);
+        switch(game->ev.type){
+            case ALLEGRO_EVENT_KEY_DOWN:
+                if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER)
+                    FileMenu(game);
+            break;
+            case ALLEGRO_EVENT_TIMER:
+                al_draw_bitmap(strt_background[(i/3)%3], 0, 0, 0);
+                al_flip_display();
+                i++;
+            break;
         }
-
-        if(game->ev.type == ALLEGRO_EVENT_TIMER){
-
-            al_draw_bitmap(strt_background[(i/3)%3], 0, 0, 0);
-            al_flip_display();
-            i++;
-
-        }
-
     }
-
 }
 
 Instance::FileMenu(Game* game)
 {
-
     std::cout << "Starting File Menu..." << std::endl;
-
-    int x = 480, aux = 2, i=0;
+    int heartX = 3; // representa qual posição o coração está
+    int aux = 2; // representa que nem todos estão no mesmo estado
+    int i=0;
     Player save[3];
-
     save[0].Load(".\\entities\\save_0.txt");
     save[1].Load(".\\entities\\save_1.txt");
     save[2].Load(".\\entities\\save_2.txt");
 
-    if (save[0].registered == 1){x = 255;}
-    else if (save[1].registered == 1) {x = 327;}
-    else if (save[2].registered == 1) {x = 399;}
+    this->att_heartX(heartX,0,save,0);
 
-    if(save[0].registered == save[1].registered && save[0].registered == save[2].registered){
-
-        if (save[0].registered == 1) {aux = 1;}
-        else {aux = 0;}
+    int cont = 0;
+    for(int j=0;j<3;j++){
+        if(save[j].registered == 1){
+            cont++;
+        }
+    }
+    if(cont == 3){  // se todos estão registrados
+        aux = 1;
+    }else if(cont == 0){    // se nenhum está registrado
+        aux = 0;
     }
 
     while(game->playing){
-
         al_wait_for_event(game->q, &game->ev);
-
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){game->playing = false;}
-
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
-
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {StartMenu(game);}
-
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
-
-                if (x == 480) {RegisterMenu(game);}
-
-                else if (x == 528) {EliminationMenu(game);}
-
-                else if (x == 255) {
-
-                    game->player = save[0];
-                    MainGame(game);
-
+        switch(game->ev.type){
+            case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                game->playing = false;
+            break;
+            case ALLEGRO_EVENT_KEY_DOWN:
+                switch(game->ev.keyboard.keycode){
+                    case ALLEGRO_KEY_ESCAPE:
+                        StartMenu(game);
+                    break;
+                    case ALLEGRO_KEY_ENTER:
+                        if (heartX == 3) {
+                            RegisterMenu(game);
+                        }
+                        else if (heartX == 4) {
+                            EliminationMenu(game);
+                        }else{
+                            game->player = save[heartX];
+                            MainGame(game);
+                        }
+                        save[0].Load(".\\entities\\save_0.txt");
+                        save[1].Load(".\\entities\\save_1.txt");
+                        save[2].Load(".\\entities\\save_2.txt");
+                    break;
+                    // esses dois cases tem efeito de "ou"
+                    case ALLEGRO_KEY_RIGHT:
+                    case ALLEGRO_KEY_DOWN:
+                            if (heartX == 3 && aux != 0) {    // vai do register para o elimination
+                                heartX = 4;
+                            }
+                            else if (heartX == 4){
+                                this->att_heartX(heartX,0,save,0);
+                            }
+                           else if (heartX == 0){
+                                this->att_heartX(heartX,1,save,0);
+                            }
+                            else if (heartX == 1){
+                                this->att_heartX(heartX,2,save,0);
+                            }
+                            else if(heartX == 2 ) {
+                                if (aux != 1) {heartX = 3;}
+                                else {heartX = 4;}
+                            }
+                    break;
+                    // esses dois cases tem efeito de "ou"
+                    case ALLEGRO_KEY_LEFT:
+                    case ALLEGRO_KEY_UP:
+                            if (heartX == 3 && aux != 0){
+                            	this->att_heartX(heartX,2,save,1);
+                            }
+                            else if (heartX == 4) {
+                                if (aux != 1){heartX = 3;}
+                                else {heartX = 2;}
+                            }
+                            else if (heartX == 1) {
+                            	this->att_heartX(heartX,0,save,1);
+                            }
+                            else if(heartX == 2){
+                                this->att_heartX(heartX,1,save,1);
+                            }else if(heartX == 0){
+                                heartX = 4;
+                            }
+                    break;
                 }
-
-                else if (x == 327) {
-
-                    game->player = save[1];
-                    MainGame(game);
-
+            break;
+            case ALLEGRO_EVENT_TIMER:
+                this->dicionario_heartX(heartX,0);    // manda o heartX para coordenadas
+                al_draw_bitmap(load_background, 0, 0, 0);
+                for(i = 0; i<3; i++){
+                    if(save[i].registered == 1) {al_draw_text(game->f, al_map_rgb(255,255,255), 216, i*72 + 240, 0, save[i].name);}
                 }
-
-                else if (x == 399) {
-
-                    game->player = save[2];
-                    MainGame(game);
-
-                }
-
-                save[0].Load(".\\entities\\save_0.txt");
-                save[1].Load(".\\entities\\save_1.txt");
-                save[2].Load(".\\entities\\save_2.txt");
-
-            }
-
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){
-
-                if (x == 480 && aux != 0) {x = 528;}
-
-                else if (x == 528){
-
-                    if(save[0].registered == 1) {x = 255;}
-                    else if(save[1].registered == 1) {x = 327;}
-                    else if(save[2].registered == 1) {x = 399;}
-                    else {x = 480;}
-
-                }
-
-                else if (x == 255){
-
-                    if(save[1].registered == 1) {x = 327;}
-                    else if(save[2].registered == 1) {x = 399;}
-                    else {x = 480;}
-
-                }
-
-                else if (x == 327){
-
-                    if(save[2].registered == 1) {x = 399;}
-                    else {x = 480;}
-
-                }
-
-                else if(x == 399 ) {
-
-                    if (aux != 1) {x = 480;}
-                    else {x = 528;}
-
-                }
-
-            }
-
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){
-
-                if (x == 480 && aux != 0){
-
-                    if(save[2].registered == 1) {x = 399;}
-                    else if(save[1].registered == 1) {x = 327;}
-                    else if(save[0].registered == 1) {x = 255;}
-                    else {x = 528;}
-
-                }
-
-                else if (x == 528) {
-
-                    if (aux != 1) {x = 480;}
-                    else {x = 399;}
-
-                }
-
-                else if (x == 255) {x = 528;}
-
-                else if (x == 327) {
-
-                    if(save[0].registered == 1) {x = 255;}
-                    else {x = 528;}
-
-                }
-
-                else if(x == 399){
-
-                    if(save[1].registered == 1) {x = 327;}
-                    else if(save[0].registered == 1) {x = 255;}
-                    else {x = 528;}
-
-                }
-
-            }
-
+                al_draw_bitmap(heart, 120, heartX, 0);
+                this->dicionario_heartX(heartX,1);        // manda o heartX para posições de volta
+                al_flip_display();
+            break;
         }
-
-        if(game->ev.type == ALLEGRO_EVENT_TIMER){
-
-            al_draw_bitmap(load_background, 0, 0, 0);
-
-            for(i = 0; i<3; i++){
-
-                if(save[i].registered == 1) {al_draw_text(game->f, al_map_rgb(255,255,255), 216, i*72 + 240, 0, save[i].name);}
-
-            }
-
-            al_draw_bitmap(heart, 120, x, 0);
-
-            al_flip_display();
-
-        }
-
     }
-
 }
 
 Instance::RegisterMenu(Game* game)
 {
 
+    std::cout << "Registering..." << std::endl;
     Player save[3];
-
     save[0].Load(".\\entities\\save_0.txt");
     save[1].Load(".\\entities\\save_1.txt");
     save[2].Load(".\\entities\\save_2.txt");
 
     int x, i;
-
     if(save[0].registered == 0){x = 0;}
     else if (save[1].registered == 0) {x = 1;}
     else if (save[2].registered == 0) {x = 2;}
@@ -529,11 +454,56 @@ Instance::EliminationMenu(Game* game)
 
 Instance::MainGame(Game* game)
 {
-    Load jogo;
+    //Load jogo;
+    //std::cout << jogo -> registered << std::endl;
 
+    this->gameLoop(game);
+    std::cout << "!!!" << std::endl;
 
-    std::cout << jogo -> registered << std::endl;
+}
 
+Instance::gameLoop(Game* game)
+{
+    int position_to_render = 2;
+    int x = 0;
+    int y = 0;
+    al_draw_bitmap(dark_background, 0, 0, 0);
+    al_draw_bitmap(zelda_sprites[position_to_render], y, x, 0);
+    while(game->playing){
+        al_wait_for_event(game->q, &game->ev);
+        this->quitGame(game,1);
+        switch(game->ev.type){
+            case ALLEGRO_EVENT_KEY_DOWN:
+                switch(game->ev.keyboard.keycode){
+                    case ALLEGRO_KEY_UP:
+                        if(y-20 >= 0)
+                        y-=20;
+                        position_to_render = position_to_render == 0? 1 : 0;
+                    break;
+                    case ALLEGRO_KEY_DOWN:
+                        if(y+20 <= 630)
+                        y+=20;
+                        position_to_render = position_to_render == 2? 3 : 2;
+                    break;
+                    case ALLEGRO_KEY_LEFT:
+                        if(x-20 >= 0)
+                        x-=20;
+                        position_to_render = position_to_render == 6? 7 : 6;
+                    break;
+                    case ALLEGRO_KEY_RIGHT:
+                        if(x+20 <= 720)
+                        x+=20;
+                        position_to_render = position_to_render == 4? 5 : 4;
+                    break;
+                }
+            break;
+            case ALLEGRO_EVENT_TIMER:
+                al_draw_bitmap(dark_background, 0, 0, 0);
+                al_draw_bitmap(zelda_sprites[position_to_render], x, y, 0);
+                al_flip_display();
+            break;
+        }
+    }
 }
 
 Instance::Register(Game* game, std::string save_dir, int y)
@@ -593,19 +563,101 @@ Instance::Register(Game* game, std::string save_dir, int y)
     }
 
     if (reg){
-
         std::ofstream save;
         save.open(save_dir);
-
         save << "registered = 1" << std::endl;
         save << "name = " << name << std::endl;
         save << "health = 3" << std::endl;
         save << "hitbox = 0, 0" << std::endl;
         save << "zone = 1, 2" << std:: endl;
-
         save.close();
-
     }
-
 }
 
+Instance::dicionario_heartX(int &heartX, int coordenadas)
+{
+    if(!coordenadas){
+        // dicionario que transforma a posição do coração em coordenadas
+        switch(heartX){
+            case 0:
+                heartX = 255;   // primeira opcao
+            break;
+            case 1:
+                heartX = 327; // segunda opcao
+            break;
+            case 2:
+                heartX = 399; // terceira opcao
+            break;
+            case 3:
+                heartX = 480; // register menu
+            break;
+            case 4:
+                heartX = 528; // elimination menu
+            break;
+        }
+    }else{
+        // dicionario que transforma as coordenadas do coração em posições
+        switch(heartX){
+            case 255:
+                heartX = 0;   // primeira opcao
+            break;
+            case 327:
+                heartX = 1; // segunda opcao
+            break;
+            case 399:
+                heartX = 2; // terceira opcao
+            break;
+            case 480:
+                heartX = 3; // register menu
+            break;
+            case 528:
+                heartX = 4; // elimination menu
+            break;
+        }
+    }
+}
+
+Instance::att_heartX(int &heartX,int posicao,Player save[], int decrease)
+{
+    int entrou = 0;
+    if(decrease){
+        for(int j=posicao;j>-1;j--){
+            if(save[j].registered == 1) {
+                entrou = 1;
+                heartX = j;
+                break;  // para no primeiro que achar
+            }
+        }
+    }else{
+        for(int j=posicao;j<3;j++){
+            if(save[j].registered == 1) {
+                entrou = 1;
+                heartX = j;
+                break;  // para no primeiro que achar
+            }
+        }
+    }
+    if(!entrou){
+    	if(decrease){
+    		heartX = 4; // elimination
+    	}else{
+    		heartX = 3; // register
+    	}
+    }
+}
+Instance::quitGame(Game* game,int hasEventQueue)
+{
+    if(hasEventQueue == 0)
+        al_wait_for_event(game->q, &game->ev);
+
+    switch(game->ev.type){
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            game->playing = false;
+        break;
+        case ALLEGRO_EVENT_KEY_DOWN:
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                game->playing = false;
+            }
+        break;
+    }
+}
