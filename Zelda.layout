@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<FileVersion major="1" minor="0" />
+	<ActiveTarget name="Debug" />
+	<File name="src\Instance.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="15167" topLine="25" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+			<Collapse line="21" />
+			<Collapse line="39" />
+			<Collapse line="49" />
+			<Collapse line="55" />
+			<Collapse line="57" />
+			<Collapse line="63" />
+			<Collapse line="86" />
+			<Collapse line="230" />
+			<Collapse line="247" />
+			<Collapse line="287" />
+			<Collapse line="289" />
+			<Collapse line="297" />
+			<Collapse line="306" />
+			<Collapse line="316" />
+			<Collapse line="321" />
+			<Collapse line="328" />
+			<Collapse line="336" />
+			<Collapse line="351" />
+			<Collapse line="356" />
+			<Collapse line="371" />
+			<Collapse line="453" />
+			<Collapse line="455" />
+			<Collapse line="463" />
+			<Collapse line="472" />
+			<Collapse line="482" />
+			<Collapse line="487" />
+			<Collapse line="494" />
+			<Collapse line="502" />
+			<Collapse line="517" />
+			<Collapse line="522" />
+			<Collapse line="591" />
+		</Folding>
+	</File>
+	<File name="src\Player.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3020" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+			<Collapse line="5" />
+			<Collapse line="60" />
+			<Collapse line="76" />
+			<Collapse line="92" />
+			<Collapse line="108" />
+			<Collapse line="124" />
+		</Folding>
+	</File>
+	<File name="src\Projectile.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="148" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="17" />
+			<Collapse line="27" />
+			<Collapse line="37" />
+			<Collapse line="47" />
+		</Folding>
+	</File>
+	<File name="include\Header.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1304" topLine="54" />
+		</Cursor>
+		<Folding>
+			<Collapse line="80" />
+		</Folding>
+	</File>
+	<File name="src\Entity.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="129" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\Zone.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3360" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+			<Collapse line="39" />
+			<Collapse line="75" />
+			<Collapse line="110" />
+			<Collapse line="145" />
+		</Folding>
+	</File>
+	<File name="src\Game.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2506" topLine="17" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+			<Collapse line="38" />
+			<Collapse line="61" />
+			<Collapse line="74" />
+			<Collapse line="79" />
+			<Collapse line="84" />
+			<Collapse line="89" />
+			<Collapse line="94" />
+			<Collapse line="99" />
+			<Collapse line="104" />
+			<Collapse line="109" />
+			<Collapse line="114" />
+			<Collapse line="119" />
+		</Folding>
+	</File>
+	<File name="Zelda.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="526" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="30" />
+		</Folding>
+	</File>
+	<File name="src\Hitbox.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="885" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+			<Collapse line="11" />
+			<Collapse line="19" />
+			<Collapse line="35" />
+		</Folding>
+	</File>
+</CodeBlocks_layout_file>

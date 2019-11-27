@@ -1,0 +1,5 @@
+registered = 1
+name = asdasdad
+health = 3
+hitbox = 360, 516
+zone = 3, 7
