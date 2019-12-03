@@ -1,0 +1,8 @@
+registered = 1
+name = novo
+health = 14
+hitbox = 558, 232
+zone = 2, 7
+progress =  1
+arrow = 1
+rupee = 12
