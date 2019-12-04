@@ -1,8 +1,0 @@
-registered = 1
-name = novo
-health = 7
-hitbox = 364, 444
-zone = 2, 6
-progress =  1
-arrow = 4
-rupee = 12

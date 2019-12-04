@@ -1,7 +1,7 @@
 #include "Header.h"
 
 Hitbox::BoxAddX(float x)
-{
+{//move a caixa para a direita ou esquerda
 
     this->xi+=x;
     this->xf+=x;
@@ -9,7 +9,7 @@ Hitbox::BoxAddX(float x)
 }
 
 Hitbox::BoxAddY(float x)
-{
+{//move a caixa para cima ou baixo
 
     this->yi+=x;
     this->yf+=x;
@@ -17,7 +17,7 @@ Hitbox::BoxAddY(float x)
 }
 
 bool Hitbox::Border()
-{
+{//checa se a caixa esta no limite do mapa
 
     if(xi<=0)
         return true;
@@ -33,7 +33,7 @@ bool Hitbox::Border()
 }
 
 bool Hitbox::Collision(Hitbox box)
-{
+{//compara se duas caixas colidiram
 
     if(this->xf >= box.xi && this->xi <= box.xi && this->yf >= box.yi && this->yi <= box.yf)
         return true;

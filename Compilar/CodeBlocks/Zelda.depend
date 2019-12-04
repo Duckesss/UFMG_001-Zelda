@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1575384631 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\zelda.cpp
+1575397379 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\zelda.cpp
 	"Header.h"
 
 1372628331 c:\allegro-5.0.10-mingw-4.7.0\include\allegro5\allegro.h
@@ -261,7 +261,7 @@
 1372628331 c:\allegro-5.0.10-mingw-4.7.0\include\allegro5\allegro_primitives.h
 	<allegro5/allegro.h>
 
-1575390083 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\game.cpp
+1575420014 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\game.cpp
 	"Header.h"
 
 1572467352 c:\users\usuário\desktop\pdsii\cblocks\zelda\include\game.h
@@ -284,10 +284,10 @@
 	<allegro5/allegro_primitives.h>
 	"Game.h"
 
-1575389179 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\instance.cpp
+1575421111 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\instance.cpp
 	"Header.h"
 
-1575391573 c:\users\usuário\desktop\pdsii\cblocks\zelda\include\header.h
+1575421135 c:\users\usuário\desktop\pdsii\cblocks\zelda\include\header.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_image.h>
 	<allegro5/allegro_font.h>
@@ -307,16 +307,16 @@
 	<math.h>
 	<sstream>
 
-1575348176 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\zone.cpp
+1575416096 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\zone.cpp
 	"Header.h"
 
-1575391573 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\entity.cpp
+1575411082 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\entity.cpp
 	"Header.h"
 
-1575389108 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\player.cpp
+1575410365 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\player.cpp
 	"Header.h"
 
-1575332325 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\hitbox.cpp
+1575397379 source:c:\users\usuário\desktop\pdsii\cblocks\zelda\src\hitbox.cpp
 	"Header.h"
 
 1574671454 c:\users\usuário\desktop\pdsii\cblocks\zelda\include\entity.h
