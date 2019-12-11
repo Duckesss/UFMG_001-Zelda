@@ -1,5 +1,8 @@
-registered = 0
-name = link 
-health = 3
-hitbox = 0, 0
-zone = 3, 7
+registered = 1
+name = novo
+health = 7
+hitbox = 384, 366
+zone = 2, 1
+progress =  1
+arrow = 4
+rupee = 6
