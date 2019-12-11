@@ -1,10 +1,11 @@
 #include "Header.h"
 
 Instance::Instance()
-{ //carrega bitmap e fontes
+{
     strt_background[0] = al_load_bitmap(".\\assets\\strt_background_0.png");
     strt_background[1] = al_load_bitmap(".\\assets\\strt_background_1.png");
     strt_background[2] = al_load_bitmap(".\\assets\\strt_background_2.png");
+
 
     load_background = al_load_bitmap(".\\assets\\load_background.png");
     pause_screen = al_load_bitmap(".\\assets\\pause_screen.png");
@@ -21,11 +22,13 @@ Instance::Instance()
     f = al_load_ttf_font(".\\assets\\font.ttf", 24, 0);
     f_1 = al_load_ttf_font(".\\assets\\font.ttf", 48, 0);
     f_2 = al_load_ttf_font(".\\assets\\font.ttf", 72, 0);
+    musica1 = al_load_audio_stream("menu.ogg", 4, 1024);
+
 
 }
 
 Instance::~Instance()
-{ //libera bitmaps e fontes
+{
 
     int i;
 
@@ -39,65 +42,77 @@ Instance::~Instance()
     al_destroy_bitmap(map_background);
     al_destroy_bitmap(hud);
     al_destroy_bitmap(heart);
-    al_destroy_bitmap(defeat_background);
-    al_destroy_bitmap(victory_background);
-    al_destroy_bitmap(pause_screen);
-    al_destroy_bitmap(empty_heart);
-    al_destroy_bitmap(half_heart);
-    al_destroy_font(f);
-    al_destroy_font(f_2);
-    al_destroy_font(f_1);
 
 }
 
 Instance::StartMenu(Game* game)
-{ //"Recepção" do jogo
+{
+    float i = 0;
+    al_attach_audio_stream_to_mixer(musica1, al_get_default_mixer());
+    al_set_audio_stream_playmode(musica1, ALLEGRO_PLAYMODE_LOOP);
 
-    cout << "Starting Menu..." << endl;
-
-    float i = 0; //auxiliar para fazer a animação
+    std::cout << "Starting Menu..." << std::endl;
 
     while(game->running){
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fechar a jane;a
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+
 			game->running = false;
 			game->playing = false;
+
 		}
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){ //espera uma tecla ser apertada
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){//fecha o jogo
+
+        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
+
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+
                 game->running = false;
                 game->playing = false;
+
             }
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){ //vai para o próximo menu
+
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
+
                 FileMenu(game);
+
                 break;
+
             }
+
         }
-        if(game->ev.type == ALLEGRO_EVENT_TIMER){//animação
+
+
+        if(game->ev.type == ALLEGRO_EVENT_TIMER){
+
             al_draw_bitmap(strt_background[((int)i/3)%3], 0, 0, 0);
             al_flip_display();
             i+=0.1;
+
         }
+
     }
+
 }
 
-Instance::FileMenu(Game* game)
-{ //mostra os saves
 
-    cout << "Starting File Menu..." << endl;
+Instance::FileMenu(Game* game)
+{
+
+    std::cout << "Starting File Menu..." << std::endl;
 
     int x = 480, aux = 2, i=0;
-
-    //verifica quais saves ja estao registrados e adapta o meu a isso
     Player save[3];
-    save[0].Load(".\\assets\\save_0.txt");
-    save[1].Load(".\\assets\\save_1.txt");
-    save[2].Load(".\\assets\\save_2.txt");
+
+    save[0].Load(".\\entities\\save_0.txt");
+    save[1].Load(".\\entities\\save_1.txt");
+    save[2].Load(".\\entities\\save_2.txt");
+
     if (save[0].registered == 1){x = 255;}
     else if (save[1].registered == 1) {x = 327;}
     else if (save[2].registered == 1) {x = 399;}
+
     if(save[0].registered == save[1].registered && save[0].registered == save[2].registered){
         if (save[0].registered == 1) {aux = 1;}
         else {aux = 0;}
@@ -107,110 +122,137 @@ Instance::FileMenu(Game* game)
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fecha a janela
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+
 			game->running = false;
 			game->playing = false;
+
         }
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){ //verifica se algum botao foi apertado
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) // volta para o menu anterior
-                StartMenu(game);
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){ //seleciona na posição apontada
+
+        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
+
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {StartMenu(game);}
+
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
 
                 game->playing = true;
 
-                if (x == 480)
-                    RegisterMenu(game);
-                else if (x == 528)
-                    EliminationMenu(game);
+                if (x == 480) {RegisterMenu(game);}
+
+                else if (x == 528) {EliminationMenu(game);}
+
                 else if (x == 255) {
+
                     game->player = &save[0];
                     game->player->save = 0;
-                    game->c = game->player->v;
+                    game->c = game->player->c;
+
                     MainGame(game);
+
                 }
+
                 else if (x == 327) {
+
                     game->player = &save[1];
                     game->player->save = 1;
-                    game->c = game->player->v;
+                    game->c = game->player->c;
                     MainGame(game);
+
                 }
+
                 else if (x == 399) {
+
                     game->player = &save[2];
                     game->player->save = 2;
-                    game->c = game->player->v;
+                    game->c = game->player->c;
                     MainGame(game);
+
                 }
 
-                //atualiza os saves
-                save[0].Load(".\\assets\\save_0.txt");
-                save[1].Load(".\\assets\\save_1.txt");
-                save[2].Load(".\\assets\\save_2.txt");
-            }
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){ //desce o ponteiro
-                //{ tambem garante que ele não possa ocupar uma posição impossivel
-                    if (x == 480 && aux != 0)
-                        x = 528;
-                    else if (x == 528){
-                        if(save[0].registered == 1)
-                            x = 255;
-                        else if(save[1].registered == 1)
-                            x = 327;
-                        else if(save[2].registered == 1)
-                            x = 399;
-                        else x = 480;
-                    }
-                    else if (x == 255){
-                        if(save[1].registered == 1)
-                            x = 327;
-                        else if(save[2].registered == 1)
-                            x = 399;
-                        else x = 480;
-                    }
-                    else if (x == 327){
-                        if(save[2].registered == 1)
-                            x = 399;
-                        else x = 480;
-                    }
-                    else if(x == 399 ) {
-                        if (aux != 1) x = 480;
-                        else x = 528;
-                    }
-                //}
-            }
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){ //sobe o ponteiro
-                //{ tambem evita posições impossíveis
-                    if (x == 480 && aux != 0){
-                        if(save[2].registered == 1)
-                            x = 399;
-                        else if(save[1].registered == 1)
-                            x = 327;
-                        else if(save[0].registered == 1)
-                            x = 255;
-                        else x = 528;
-                    }
-                    else if (x == 528) {
-                        if (aux != 1) x = 480;
-                        else x = 399;
-                    }
-                    else if (x == 255)
-                            x = 528;
-                    else if (x == 327) {
-                        if(save[0].registered == 1)
-                            x = 255;
-                        else x = 528;
-                    }
-                    else if(x == 399){
-                        if(save[1].registered == 1)
-                            x = 327;
-                        else if(save[0].registered == 1)
-                            x = 255;
-                        else x = 528;
+                save[0].Load(".\\entities\\save_0.txt");
+                save[1].Load(".\\entities\\save_1.txt");
+                save[2].Load(".\\entities\\save_2.txt");
 
-                    }
-                //}
             }
+
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){
+
+                if (x == 480 && aux != 0) {x = 528;}
+
+                else if (x == 528){
+
+                    if(save[0].registered == 1) {x = 255;}
+                    else if(save[1].registered == 1) {x = 327;}
+                    else if(save[2].registered == 1) {x = 399;}
+                    else {x = 480;}
+
+                }
+
+                else if (x == 255){
+
+                    if(save[1].registered == 1) {x = 327;}
+                    else if(save[2].registered == 1) {x = 399;}
+                    else {x = 480;}
+
+                }
+
+                else if (x == 327){
+
+                    if(save[2].registered == 1) {x = 399;}
+                    else {x = 480;}
+
+                }
+
+                else if(x == 399 ) {
+
+                    if (aux != 1) {x = 480;}
+                    else {x = 528;}
+
+                }
+
+            }
+
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){
+
+                if (x == 480 && aux != 0){
+
+                    if(save[2].registered == 1) {x = 399;}
+                    else if(save[1].registered == 1) {x = 327;}
+                    else if(save[0].registered == 1) {x = 255;}
+                    else {x = 528;}
+
+                }
+
+                else if (x == 528) {
+
+                    if (aux != 1) {x = 480;}
+                    else {x = 399;}
+
+                }
+
+                else if (x == 255) {x = 528;}
+
+                else if (x == 327) {
+
+                    if(save[0].registered == 1) {x = 255;}
+                    else {x = 528;}
+
+                }
+
+                else if(x == 399){
+
+                    if(save[1].registered == 1) {x = 327;}
+                    else if(save[0].registered == 1) {x = 255;}
+                    else {x = 528;}
+
+                }
+
+            }
+
         }
-        if(game->ev.type == ALLEGRO_EVENT_TIMER){ //atualiza nomes e vidas
+
+
+        if(game->ev.type == ALLEGRO_EVENT_TIMER){
 
             al_draw_bitmap(load_background, 0, 0, 0);
 
@@ -227,19 +269,22 @@ Instance::FileMenu(Game* game)
             al_flip_display();
 
         }
+
     }
+
 }
 
 Instance::RegisterMenu(Game* game)
-{ //registrar novos saves
+{
+
+    Player save[3];
+
+    save[0].Load(".\\entities\\save_0.txt");
+    save[1].Load(".\\entities\\save_1.txt");
+    save[2].Load(".\\entities\\save_2.txt");
 
     int x, i;
 
-    //carrega informação sobre os saves existentes
-    Player save[3];
-    save[0].Load(".\\assets\\save_0.txt");
-    save[1].Load(".\\assets\\save_1.txt");
-    save[2].Load(".\\assets\\save_2.txt");
     if(save[0].registered == 0){x = 0;}
     else if (save[1].registered == 0) {x = 1;}
     else if (save[2].registered == 0) {x = 2;}
@@ -248,30 +293,28 @@ Instance::RegisterMenu(Game* game)
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fechar a janela
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 
 			game->running = false;
 			game->playing = false;
 
 		}
 
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){ //checa se algum botao foi apertado
+        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
 
             if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {FileMenu(game);}
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){ //registra um save no ponteiro x indicado
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
 
                 if (x == 3) {FileMenu(game);}
-                else if (x == 0) {Register(game, ".\\assets\\save_0.txt", x);}
-                else if (x == 1) {Register(game, ".\\assets\\save_1.txt", x);}
-                else if (x == 2) {Register(game, ".\\assets\\save_2.txt", x);}
+                else if (x == 0) {Register(game, ".\\entities\\save_0.txt", x);}
+                else if (x == 1) {Register(game, ".\\entities\\save_1.txt", x);}
+                else if (x == 2) {Register(game, ".\\entities\\save_2.txt", x);}
 
-                //atualiza os existentes
-                save[0].Load(".\\assets\\save_0.txt");
-                save[1].Load(".\\assets\\save_1.txt");
-                save[2].Load(".\\assets\\save_2.txt");
+                save[0].Load(".\\entities\\save_0.txt");
+                save[1].Load(".\\entities\\save_1.txt");
+                save[2].Load(".\\entities\\save_2.txt");
 
-                //atualiza o ponteiro
                 if(save[0].registered == 0){x = 0;}
                 else if (save[1].registered == 0) {x = 1;}
                 else if (save[2].registered == 0) {x = 2;}
@@ -279,7 +322,7 @@ Instance::RegisterMenu(Game* game)
 
             }
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){ //abaixa o ponteiro para uma posicao possivel
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){
 
                 if(x == 0) {
 
@@ -308,7 +351,7 @@ Instance::RegisterMenu(Game* game)
 
             }
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){ //sobe o ponteiro para uma posicao possivel
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){
 
 
                 if(x == 0) {x = 3;}
@@ -343,7 +386,7 @@ Instance::RegisterMenu(Game* game)
 
         }
 
-        if(game->ev.type == ALLEGRO_EVENT_TIMER){ //atualiza as informacoes dos saves
+        if(game->ev.type == ALLEGRO_EVENT_TIMER){
 
             al_draw_bitmap(register_background, 0, 0, 0);
             al_draw_bitmap(heart, 201, x*72 + 120, 0);
@@ -363,15 +406,16 @@ Instance::RegisterMenu(Game* game)
 }
 
 Instance::EliminationMenu(Game* game)
-{ //faz com que o resgistro de um save volte a ser 0
+{
+
+    Player save[3];
+
+    save[0].Load(".\\entities\\save_0.txt");
+    save[1].Load(".\\entities\\save_1.txt");
+    save[2].Load(".\\entities\\save_2.txt");
 
     int x, i;
 
-    //carrega informacoes sobre os saves
-    Player save[3];
-    save[0].Load(".\\assets\\save_0.txt");
-    save[1].Load(".\\assets\\save_1.txt");
-    save[2].Load(".\\assets\\save_2.txt");
     if(save[2].registered == 1){x = 2;}
     else if (save[1].registered == 1) {x = 1;}
     else if (save[0].registered == 1) {x = 0;}
@@ -380,28 +424,31 @@ Instance::EliminationMenu(Game* game)
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fechar a jane;a
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+
 			game->running = false;
 			game->playing = false;
+
 		}
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){ //verifica se um botao foi apertado
+
+        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
 
             if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {FileMenu(game);}
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){ //realiza a acao no ponteiro x
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
 
                 if (x == 3) {FileMenu(game);}
 
                 else if (x == 0){
 
-                    ofstream save;
-                    save.open(".\\assets\\save_0.txt");
+                    std::ofstream save;
+                    save.open(".\\entities\\save_0.txt");
 
-                    save << "registered = 0" << endl;
-                    save << "name = link " << endl;
-                    save << "health = 3" << endl;
-                    save << "hitbox = 0, 0" << endl;
-                    save << "zone = 3, 7" <<  endl;
+                    save << "registered = 0" << std::endl;
+                    save << "name = link " << std::endl;
+                    save << "health = 3" << std::endl;
+                    save << "hitbox = 0, 0" << std::endl;
+                    save << "zone = 1, 2" << std:: endl;
 
                     save.close();
 
@@ -409,14 +456,14 @@ Instance::EliminationMenu(Game* game)
 
                 else if (x == 1){
 
-                    ofstream save;
-                    save.open(".\\assets\\save_1.txt");
+                    std::ofstream save;
+                    save.open(".\\entities\\save_1.txt");
 
-                    save << "registered = 0" << endl;
-                    save << "name = link " << endl;
-                    save << "health = 3" << endl;
-                    save << "hitbox = 0, 0" << endl;
-                    save << "zone = 3, 7" <<  endl;
+                    save << "registered = 0" << std::endl;
+                    save << "name = link " << std::endl;
+                    save << "health = 3" << std::endl;
+                    save << "hitbox = 0, 0" << std::endl;
+                    save << "zone = 1, 2" << std:: endl;
 
                     save.close();
 
@@ -424,23 +471,23 @@ Instance::EliminationMenu(Game* game)
 
                 else if (x == 2){
 
-                    ofstream save;
-                    save.open(".\\assets\\save_2.txt");
+                    std::ofstream save;
+                    save.open(".\\entities\\save_2.txt");
 
-                    save << "registered = 0" << endl;
-                    save << "name = link " << endl;
-                    save << "health = 3" << endl;
-                    save << "hitbox = 0, 0" << endl;
-                    save << "zone = 3, 7" <<  endl;
+                    save << "registered = 0" << std::endl;
+                    save << "name = link " << std::endl;
+                    save << "health = 3" << std::endl;
+                    save << "hitbox = 0, 0" << std::endl;
+                    save << "zone = 1, 2" << std:: endl;
 
                     save.close();
 
                 }
 
-                //atualiza os saves
-                save[0].Load(".\\assets\\save_0.txt");
-                save[1].Load(".\\assets\\save_1.txt");
-                save[2].Load(".\\assets\\save_2.txt");
+                save[0].Load(".\\entities\\save_0.txt");
+                save[1].Load(".\\entities\\save_1.txt");
+                save[2].Load(".\\entities\\save_2.txt");
+
                 if(save[0].registered == 1){x = 0;}
                 else if (save[1].registered == 1) {x = 1;}
                 else if (save[2].registered == 1) {x = 2;}
@@ -448,7 +495,7 @@ Instance::EliminationMenu(Game* game)
 
             }
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){ //abaixa o ponteiro
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){
 
                 if(x == 0) {
 
@@ -477,7 +524,7 @@ Instance::EliminationMenu(Game* game)
 
             }
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){ //sobre o ponteiro
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){
 
 
                 if(x == 0) {x = 3;}
@@ -508,8 +555,11 @@ Instance::EliminationMenu(Game* game)
 
             }
 
+
+
         }
-        if(game->ev.type == ALLEGRO_EVENT_TIMER){ //atualiza o menu
+
+        if(game->ev.type == ALLEGRO_EVENT_TIMER){
 
             al_draw_bitmap(elimination_background, 0, 0, 0);
             al_draw_bitmap(heart, 201, x*72 + 120, 0);
@@ -530,41 +580,35 @@ Instance::EliminationMenu(Game* game)
 }
 
 Instance::MainGame(Game* game)
-{ //jogo principal
+{
 
-    cout << "Starting Main Game..." << endl;
-
-    //recarrega zonas e inimigos
     game->LoadZones();
 
-    //da set nos cooldowns
     game->player->cd = 0;
     game->player->cd_2 = 0;
-
     int i;
     bool aux;
 
-    //prepara o estado do teclado
     ALLEGRO_KEYBOARD_STATE key;
     al_get_keyboard_state(&key);
 
     game->player->dir = 0;
 
-    //atualiza o jogo dependendo do progresso
     if (game->player->progress == 1)
         for(i = 0; i<game->zone[0][3].e.size(); i++)
             if (game->zone[0][3].e[i]->type == TYPE_BOW)
                     game->zone[0][3].e[i]->Update(game, this);
+
     if (game->player->progress == 0){
         map_background = al_load_bitmap(".\\assets\\map_background_0.png");
         hud = al_load_bitmap(".\\assets\\hud_0.png");
     }
 
-    while(game->playing && game->running){
+    while(game->playing){
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fecha janela
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 
 			game->running = false;
 			game->playing = false;
@@ -573,7 +617,7 @@ Instance::MainGame(Game* game)
 
         if(game->ev.type == ALLEGRO_EVENT_TIMER){
 
-            if(game->player->box.Border()){ //transicoes de zona
+            if(game->player->box.Border()){
                 if(game->player->box.xf >= 768)
                     game->zone[game->c.i][game->c.j].MoveR(game, this);
                 if(game->player->box.xi <= 0)
@@ -585,7 +629,6 @@ Instance::MainGame(Game* game)
                 Check(game, this);
             }
 
-            //movimento
             if(al_key_down(&key, ALLEGRO_KEY_RIGHT))
                 game->player->MoveR(game);
             if (al_key_down(&key, ALLEGRO_KEY_LEFT))
@@ -594,8 +637,6 @@ Instance::MainGame(Game* game)
                 game->player->MoveD(game);
             if (al_key_down(&key, ALLEGRO_KEY_UP))
                 game->player->MoveU(game);
-
-            //ataques
             if (al_key_down(&key, ALLEGRO_KEY_X)&&game->player->cd==0)
                 game->player->Attack(game, this);
             else if (al_key_down(&key, ALLEGRO_KEY_Z)&&game->player->cd_2==0&&game->player->progress == 1&&game->player->a > 0){
@@ -604,36 +645,28 @@ Instance::MainGame(Game* game)
                 arrow->Arrow(game);
                 game->zone[game->c.i-1][game->c.j-1].e.push_back(arrow);
             }
-
-            //tela de pause
             if (al_key_down(&key, ALLEGRO_KEY_ESCAPE))
                 PauseScreen(game);
 
-            //atualiza o jogo e o estado do teclado
             UpdateGame(game, this);
             al_get_keyboard_state(&key);
 
-            //verifica consicoes de vitoria e derrota
             if(game->player->health <= 0)
                 Defeat(game);
+
             if (game->zone[0][0].e[0]->health == 0)
                 Victory(game);
 
         }
     }
 
-    cout << "Ending Main Game..." << endl;
-
-    //volta para o menu inicial
     if (!game->playing && game->running)
         StartMenu(game);
+
 }
 
-Instance::Register(Game* game, string save_dir, int y)
-{ //registra um save no diretorio enviado
-
-    cout << "Registering new save..." << endl;
-
+Instance::Register(Game* game, std::string save_dir, int y)
+{
     char name[9];
     int i;
     bool aux = true, reg = true;
@@ -656,7 +689,7 @@ Instance::Register(Game* game, string save_dir, int y)
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fecha janela
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 
             aux = false;
 			game->running = false;
@@ -664,10 +697,9 @@ Instance::Register(Game* game, string save_dir, int y)
 
 		}
 
-        //recebe letras do teclado para fazer o nome
         if(game->ev.type == ALLEGRO_EVENT_KEY_CHAR && game->ev.keyboard.keycode != ALLEGRO_KEY_ENTER && game->ev.keyboard.keycode != ALLEGRO_KEY_BACKSPACE && game->ev.keyboard.keycode != ALLEGRO_KEY_ESCAPE){
 
-            if(i<8 && ((game->ev.keyboard.unichar >= 65 && game->ev.keyboard.unichar <= 90) || (game->ev.keyboard.unichar >= 97 && game->ev.keyboard.unichar <= 122))){ //recebe as letras
+            if(i<8 && ((game->ev.keyboard.unichar >= 65 && game->ev.keyboard.unichar <= 90) || (game->ev.keyboard.unichar >= 97 && game->ev.keyboard.unichar <= 122))){
 
                 name[i] = game->ev.keyboard.unichar;
                 i++;
@@ -676,9 +708,9 @@ Instance::Register(Game* game, string save_dir, int y)
 
         }
 
-        else if (game->ev.type == ALLEGRO_EVENT_KEY_DOWN){ //apagar, finalizar e voltar
+        else if (game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE){ //apaga letra no vetor nome
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE){
 
                 if(i<8) {name[i] = '_';}
 
@@ -689,13 +721,13 @@ Instance::Register(Game* game, string save_dir, int y)
 
             }
 
-            else if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){ //finaliza o input do nome
+            else if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
                 if(i==7) {i++;}
                 name[i] = '\0';
                 aux = false;
             }
 
-            else if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){ //cancela o registro
+            else if(game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
                 aux = false;
                 reg = false;
                 RegisterMenu(game);
@@ -705,32 +737,28 @@ Instance::Register(Game* game, string save_dir, int y)
 
     }
 
-    if (reg){ //escreve no arquivo os dados
+    if (reg){
 
-        ofstream save;
+        std::ofstream save;
         save.open(save_dir);
 
-        save << "registered = 1" << endl;
-        save << "name = " << name << endl;
-        save << "health = 6" << endl;
-        save << "hitbox = 360, 516" << endl;
-        save << "zone = 3, 7" << endl;
-        save << "progress = 0" << endl;
-        save << "arrow = 10" << endl;
-        save << "rupee = 0" << endl;
+        save << "registered = 1" << std::endl;
+        save << "name = " << name << std::endl;
+        save << "health = 6" << std::endl;
+        save << "hitbox = 360, 516" << std::endl;
+        save << "zone = 3, 7" << std::endl;
+        save << "progress = 0" << std::endl;
+        save << "arrow = 10" << std::endl;
+        save << "rupee = 0" << std::endl;
 
         save.close();
-
-        cout << "Registered " << name << endl;
 
     }
 
 }
 
 Instance::PauseScreen(Game* game)
-{ //tela de pause
-
-    cout << "Main Game Paused!" << endl;
+{
 
     int y = 0;
     int x = 0;
@@ -741,7 +769,7 @@ Instance::PauseScreen(Game* game)
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fechar janela
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 
             pause = false;
 			game->running = false;
@@ -751,7 +779,7 @@ Instance::PauseScreen(Game* game)
 
         if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){ //abaixa o ponteiro
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_RIGHT || game->ev.keyboard.keycode == ALLEGRO_KEY_DOWN){
                 x++;
 
                 if (x>1)
@@ -759,21 +787,20 @@ Instance::PauseScreen(Game* game)
 
             }
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){ //sobe o ponteiro
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_LEFT || game->ev.keyboard.keycode == ALLEGRO_KEY_UP){
                 x--;
 
                 if (x<0)
                     x = 0;
             }
 
-            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){ //seleciona na posicao indicada
+            if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER){
 
-                if(x == 0){ //volta para o jogo
-                    cout << "Resuming..." << endl;
+                if(x == 0){
                     pause = false;
                 }
 
-                else if (x == 1){ //volta para o menu inicial
+                else if (x == 1){
 
                     game->playing = false;
                     pause = false;
@@ -804,7 +831,7 @@ Instance::PauseScreen(Game* game)
 }
 
 Instance::DisplayHealth(int health, int x, int y)
-{ //desenha os corações de vida
+{
 
     int h[8];
     int i = 0;
@@ -814,7 +841,6 @@ Instance::DisplayHealth(int health, int x, int y)
 
     i = 0;
 
-    //transforma o valor da vida em um vetor
     while (health >0){
 
         if (h[i] != 2){
@@ -828,7 +854,6 @@ Instance::DisplayHealth(int health, int x, int y)
 
     i = 0;
 
-    //desenha o vetor vida
     for(i=0; i<8; i++){
 
         if(h[i] == 2)
@@ -843,7 +868,7 @@ Instance::DisplayHealth(int health, int x, int y)
 }
 
 Instance::DisplayNum(int num, int x, int y)
-{ //desenha valores numericos na tela
+{
 
     int v[3];
     int i=0;
@@ -854,7 +879,6 @@ Instance::DisplayNum(int num, int x, int y)
 
     i = 0;
 
-    //transforma o numero em vetor
     while(num > 0){
 
         if (num >= pow(10,(2-i))){
@@ -865,7 +889,6 @@ Instance::DisplayNum(int num, int x, int y)
             i++;
     }
 
-    //desenha o vetor
     for (i=0; i<3; i++){
         sprintf(txt[i], "%d", v[i]);
         al_draw_text(f, al_map_rgb(255,255,255), x + 24*i, y, 0, txt[i]);
@@ -875,8 +898,9 @@ Instance::DisplayNum(int num, int x, int y)
 }
 
 Instance::Defeat(Game* game)
-{ // tela de derrota
+{
 
+    al_set_audio_stream_playing(musica1,0);
     bool aux = true;
 
     game->playing = false;
@@ -891,7 +915,7 @@ Instance::Defeat(Game* game)
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fechar janela
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 
             aux = false;
 			game->running = false;
@@ -899,7 +923,7 @@ Instance::Defeat(Game* game)
 
 		}
 
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){ //espera o player apertar enter para continuar
+        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
             if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER || game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
                 aux = false;
         }
@@ -909,8 +933,8 @@ Instance::Defeat(Game* game)
 }
 
 Instance::Victory(Game* game)
-{ //tela de vitória
-
+{
+    al_set_audio_stream_playing(musica1,0);
     bool aux = true;
 
     game->playing = false;
@@ -927,7 +951,7 @@ Instance::Victory(Game* game)
 
         al_wait_for_event(game->q, &game->ev);
 
-        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){ //fechar janela
+        if(game->ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 
             aux = false;
 			game->running = false;
@@ -935,7 +959,7 @@ Instance::Victory(Game* game)
 
 		}
 
-        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){ //espera o player apertar o enter para continuar
+        if(game->ev.type == ALLEGRO_EVENT_KEY_DOWN){
             if(game->ev.keyboard.keycode == ALLEGRO_KEY_ENTER || game->ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
                 aux = false;
         }
