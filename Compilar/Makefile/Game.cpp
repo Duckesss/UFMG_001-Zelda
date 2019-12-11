@@ -1,12 +1,12 @@
 #include "Header.h"
 
 Game::Game()
-{ //inicializa o jogo
-    cout << "Initializing Game..." << endl;
+{
+    std::cout << "Initializing Game..." << std::endl;
+
     playing = true;
     running = true;
 
-    //inicializacao allegro e addons
     al_init();
 	al_init_font_addon();
 	al_init_ttf_addon();
@@ -15,42 +15,47 @@ Game::Game()
 	al_install_keyboard();
 	al_install_audio();
 	al_init_acodec_addon();
+  al_reserve_samples(7);
 
-	//definição de variaveis
     d = al_create_display(768,672);
     q = al_create_event_queue();
     t = al_create_timer(1.0/150);
 
-    //registrar eventos
+
     al_register_event_source(q, al_get_keyboard_event_source());
 	al_register_event_source(q, al_get_display_event_source(d));
 	al_register_event_source(q, al_get_timer_event_source(t));
+
     al_start_timer(t);
 
-    //checar se tudo foi inicializado corretamente
     InitCheck();
+
 }
 
 Game::~Game()
-{ // fecha o jogo
+{
 
-    cout << "Closing Game..." << endl;
-    int i;
+    std::cout << "Closing Game..." << std::endl;
 
-    //desativa inicializações allegro
     al_uninstall_audio();
     al_uninstall_keyboard();
+
     al_destroy_display(d);
     al_destroy_timer(t);
     al_destroy_event_queue(q);
+
     al_destroy_bitmap(player->sprite);
+
+    std::cout << "Game Closed!" << std::endl;
+
+    int i;
+
     for (i=0; i<16; i++){
 
         al_destroy_bitmap(player->att_sprite[i]);
 
     }
 
-    //desalocar matriz
     for (i=0; i<7; i++){
         for(int j = 0; j<3; j++){
             for(int k = 0; k<zone[i][j].e.size(); k++){
@@ -59,13 +64,13 @@ Game::~Game()
             }
         }
     }
-    cout << "Game Closed!" << endl;
+
 }
 
 Game::InitCheck()
-{ //verifica a inicalização allegro
+{
 
-    cout << "Verifying Initialization..." << endl;
+    std::cout << "Verifying Initialization" << std::endl;
 
     if(!al_init()) {
 		fprintf(stderr, "failed to initialize allegro!\n");
@@ -117,24 +122,22 @@ Game::InitCheck()
       return -1;
    }
 
-    cout << "Game Initialized Successfully!" << endl;
+   std::cout << "Game Initialized Successfully!" << std::endl;
 
 	return 1;
 
 }
 
 Game::LoadZones()
-{ //prepara todas as zonas
+{
 
-    cout << "Loading Zones..." << endl;
-    //limpa vetores
     for (int i=0; i<3; i++){
         for(int j = 0; j<7; j++){
             zone[i][j].e.clear();
         }
     }
 
-    //{carrega as paredes das zonas
+    //{ Carrega as paredes da zona
         zone[1][0].Load(".\\assets\\zone_0.txt");
         zone[1][1].Load(".\\assets\\zone_1.txt");
         zone[1][2].Load(".\\assets\\zone_2.txt");
@@ -148,7 +151,6 @@ Game::LoadZones()
         zone[0][0].Load(".\\assets\\zone_9.txt");
     //}
 
-    //{ posiciona todos o inimigos
     Bow* bow = new Bow();
     zone[0][3].e.push_back(bow);
 
@@ -180,14 +182,16 @@ Game::LoadZones()
     zone[1][2].e.push_back(r_4);
 
     Shooter* s_6 = new Shooter(100, 200);
-    Shooter* s_7 = new Shooter(100, 350);
-    Shooter* s_8 = new Shooter(100, 500);
+    Shooter* s_7 = new Shooter(300, 200);
+    Shooter* s_8 = new Shooter(500, 200);
     zone[1][1].e.push_back(s_6);
     zone[1][1].e.push_back(s_7);
     zone[1][1].e.push_back(s_8);
 
     Boss* boss = new Boss();
     zone[0][0].e.push_back(boss);
-    //}
-    cout << "Zones Loaded!" << endl;
+
+
+
+
 }
