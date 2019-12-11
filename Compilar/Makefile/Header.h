@@ -35,215 +35,190 @@
 #define MAP_X 768
 #define MAP_Y 528
 
+using namespace std;
+
 class Game;
 class Instance;
 class Entity;
 
-struct Double{
-    int i;
-    int j;
-    float x;
-    float y;
+struct Double{ //struct para carregar alguns valores específicos
+    int i; //posição i da matriz
+    int j; //posição j da matriz
+    float x; //parte x de um vetor velocidade
+    float y; //parte y de um vetor velocidade
 };
 
-class Hitbox{
+class Hitbox{ //hitbox de algo
 public:
-    float xi, xf, yi, yf;
+    float xi, xf, yi, yf; //pontos iniciais e finais, que geram a "caixa"
 
-    BoxAddX(float);
-    BoxAddY(float);
-    bool Border();
-    bool Collision(Hitbox);
-
-
+    BoxAddX(float); //move a caixa para a direita ou esquerda
+    BoxAddY(float); //move a caixa para cima ou baixo
+    bool Border(); //checa se a caixa esta no limite do mapa
+    bool Collision(Hitbox); //compara se duas caixas colidiram
 };
 
-class Entity{
+class Entity{ //classe pai das entidades
 public:
-    Hitbox box; //Hitbox da entidade
-    int health; //Vida da entidade
-    int type; //Tipo auxiliar da entidade
-    Double v;
-    int dir;
-    int cd, cd_2;
-    ALLEGRO_BITMAP* sprite; //Sprite
+    Hitbox box; //hitbox da entidade
+    int health; //vida da entidade
+    int type; //tipo da entidade
+    Double v; //vetor velocidade
+    int dir; //direção da unidade
+    int cd, cd_2; //cooldowns das entidades
+    ALLEGRO_BITMAP* sprite; //sprites
 
-    virtual MoveL();
-    virtual MoveR();
-    virtual MoveU();
-    virtual MoveD();
-    virtual Attack();
+    virtual Update(Game*, Instance*); //atualiza a entidade
 
-    virtual Update(Game*, Instance*); //Atualiza a entidade
-
-    virtual ~Entity();
+    virtual ~Entity(); //destrutor da classe
 };
 
-class Drop: public Entity{;
+class Drop: public Entity{ //drops de inimigos
 public:
+    Update(Game*, Instance*);
 
-    Drop(Hitbox);
+    Drop(Hitbox); //construtor da classe
     ~Drop();
-    Update(Game*, Instance*);
-
 };
 
-class Projectile: public Entity{
+class Projectile: public Entity{ //projéteis do jogo
 public:
-
-    Arrow(Game*);
-    Ball(Hitbox, int);
     Update(Game*, Instance*);
+
+    Arrow(Game*); //faz o projétil ser uma flecha
+    Ball(Hitbox, int); //cria um projetil bola com um sprite decidido pelo int
     ~Projectile();
-
 };
 
-class Player: public Entity{
+class Player: public Entity{ //classe do jogador
 public:
-    char name[9];
-    int registered;
-    int save, progress;
-    std::vector<ALLEGRO_BITMAP*> att_sprite;
-    int r, a;
-    Double c;
+    char name[9]; //nome do jogaor
+    int registered; //se o save aberto está registrado
+    int save; //qual save esse jogador pertence
+    int progress; //o progresso do jogador
+    vector<ALLEGRO_BITMAP*> att_sprite; //vetor com os sprites de ataque
+    int r, a; //contagem de rupees e flechas respectivamente
 
+    //movimenta o jogador
     MoveL(Game*);
     MoveR(Game*);
     MoveU(Game*);
     MoveD(Game*);
-    Attack(Game*, Instance*);
-    Arrow(Game*, Instance*);
-    SwordCollision(Game*, Hitbox);
 
-    Load(std::string);
-    Save(Game*);
+    Attack(Game*, Instance*); //ataque do jogadorr
+    SwordCollision(Game*, Hitbox); //verifica e realiza o contato da espada com inimigo
 
+    Load(string); //carrega os dados do jogador
+    Save(Game*); //salva o progresso do jogador no txt dele
 };
 
-class Bow: public Entity{
+class Bow: public Entity{ //arco
 public:
-
     Update(Game*, Instance*);
 
-    Bow();
+    Bow(); //cria o arco
     ~Bow();
-
 };
 
-class Shooter: public Entity{
+class Shooter: public Entity{ //inimigo que atira
 public:
-    Shooter(int, int);
+    Update(Game*, Instance*);
+
+    Shooter(int, int); //cria um atirador na posição indicada
     ~Shooter();
-    Update(Game*, Instance*);
-
 };
 
-class Runner: public Entity{
+class Runner: public Entity{ //inimigo que segue
 public:
-    Runner(int, int);
+    Update(Game*, Instance*);
+
+    Runner(int, int); //cria um corredor na posição indicada
     ~Runner();
-    Update(Game*, Instance*);
-
 };
 
-class Boss: public Entity{
+class Boss: public Entity{ //chefão final do jogo
 public:
-    int state;
-    int hit;
+    int state; //estado de ataque do boss
+    int hit; //verifica se o jogador já foi acertado pelo ataque
 
-    Boss();
+    Update(Game*, Instance*);
+
+    Boss(); //cria o boss na posição dele
     ~Boss();
-
-    Update(Game*, Instance*);
-
 };
 
-class Zone{
+class Zone{ //zonas do jogo
 public:
+    vector<Hitbox> wall; //vetor de hitbox das paredes da zona
+    vector<Entity*> e; //vetor das entidades na zona
 
-    std::vector<Hitbox> wall;
-    std::vector<Entity*> e;
-
+    //realiza a animação de transição da zona
     MoveR(Game*, Instance*);
     MoveL(Game*, Instance*);
     MoveU(Game*, Instance*);
     MoveD(Game*, Instance*);
-
     BossZone(Game*, Instance*);
 
-    Load(std::string file_path);
-    bool WallCheck(Hitbox);
-
+    Load(string file_path); //carrega as paredes da zona
+    bool WallCheck(Hitbox); //verifica se houve alguma colisão nas paredes da zona
 };
 
-class Game{
+class Game{ //os dados principais do jogo
 public:
+    ALLEGRO_DISPLAY* d; //display
+    ALLEGRO_EVENT_QUEUE* q; //fila de eventos
+    ALLEGRO_TIMER* t; //timer
+    ALLEGRO_EVENT ev; //evento de allegro
+    Player* player; //jogador principal
+    Zone zone[3][7]; //zonas do jogo
+    bool playing; //bool se o jogo esta sendo jogado
+    bool running; //bool se o programa deve ser mantido aberto
+    Double c; //a posição atual na matriz
 
-    bool playing;
-    bool running;
-    Double c;
+    InitCheck(); //checa se tudo inicializou corretamente
+    LoadZones(); //prepara todas as zonas
 
-    ALLEGRO_DISPLAY* d;
-    ALLEGRO_EVENT_QUEUE* q;
-    ALLEGRO_TIMER* t;
-    ALLEGRO_EVENT ev;
-    Player* player;
-    Zone zone[3][7];
-
-
-    InitCheck(); //mover para zone
-
-    LoadZones();
-
-    Game();
-    ~Game();
-
+    Game(); //inicia o jogo e Allegro
+    ~Game(); //fecha o jogo e se livra da memória
 };
 
 class Instance{
 public:
+    ALLEGRO_BITMAP* strt_background[3]; //imagens para fazer a an
+    ALLEGRO_BITMAP* load_background; //bakcground da tela de load
+    ALLEGRO_BITMAP* register_background; //background da tela de registro
+    ALLEGRO_BITMAP* elimination_background; //background da tela de eliminacao
+    ALLEGRO_BITMAP* defeat_background; //background da tela de derrota
+    ALLEGRO_BITMAP* victory_background; //background da tela de vitoria
+    ALLEGRO_BITMAP* map_background; //mapa do jogo
+    ALLEGRO_BITMAP* hud; //hud
+    ALLEGRO_BITMAP* pause_screen; //tela de pause
+    ALLEGRO_BITMAP* heart; //sprite do coracao cheio
+    ALLEGRO_BITMAP* empty_heart; //sprite coracao vazio
+    ALLEGRO_BITMAP* half_heart; //sprite meio coracao
+    ALLEGRO_FONT* f; //fonte 24
+    ALLEGRO_FONT* f_1; //fonte 48
+    ALLEGRO_FONT* f_2; //fonte 72
 
-    ALLEGRO_BITMAP* strt_background[3];
-    ALLEGRO_BITMAP* load_background;
-    ALLEGRO_BITMAP* register_background;
-    ALLEGRO_BITMAP* elimination_background;
-    ALLEGRO_BITMAP* heart;
-    ALLEGRO_BITMAP* map_background;
-    ALLEGRO_BITMAP* defeat_background;
-    ALLEGRO_BITMAP* victory_background;
-    ALLEGRO_BITMAP* hud;
-    ALLEGRO_BITMAP* pause_screen;
-    ALLEGRO_BITMAP* empty_heart;
-    ALLEGRO_BITMAP* half_heart;
-    ALLEGRO_FONT* f;
-    ALLEGRO_FONT* f_1;
-    ALLEGRO_FONT* f_2;
-    ALLEGRO_AUDIO_STREAM *musica1 = NULL;
+    StartMenu(Game*); //menu inicial
+    FileMenu(Game*); //mostra os saves
+    RegisterMenu(Game*); //permite registrar novos saves
+    EliminationMenu(Game*); //permite "deletar" saves
+    MainGame(Game*); //inicial o jogo principal
+    PauseScreen(Game*); //salva pausa o jogo
+    Victory(Game*); //tela de vitoria
+    Defeat(Game*); //tela de derrota
+    Register(Game*, string, int); //registrar um save
+    DisplayHealth(int, int, int); //mostrar vida
+    DisplayNum(int, int, int); //mostrar um numero
 
-
-
-
-    Instance();
-    virtual ~Instance();
-
-    StartMenu(Game*);
-    FileMenu(Game*);
-    RegisterMenu(Game*);
-    EliminationMenu(Game*);
-    MainGame(Game*);
-    PauseScreen(Game*);
-    Victory(Game*);
-    Defeat(Game*);
-    Register(Game*, std::string, int);
-    DisplayHealth(int, int, int);
-    DisplayNum(int, int, int);
+    Instance(); //cria instancia
+    ~Instance(); //libera instancia
 
 };
 
-void UpdateGame(Game*, Instance*);
+void UpdateGame(Game*, Instance*); //atualiza todo o jogo
 
-void Check(Game*, Instance*);
-
-void out();
+void Check(Game*, Instance*); //checa se há lixo e corrige
 
 #endif
