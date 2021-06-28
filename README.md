@@ -1,17 +1,14 @@
-	Trabalho Prático PDSII - Zelda UFMG
-Compilação:
-->Makefile
-	Para compilar pelo makefile, é necessário primeiramente isntalar primeiramente MingW no computador, após isso, usando a prompt de comando, você deve executar o makefile localizado na sua pasta e então poderá compilar e inicializar o jogo.
+# Zelda UFMG
+## English
+Zelda UFMG is a game project based on the Zelda series where the player is late for its test and must go face his professor in order to pass in class
 
-->Code::Blocks 
-	A compilação por Code::Blocks é relativamente mais simples, basta abrir o zelda.cbp na pasta usando o Code::Blocks, todavia antes faz-se necessário instalar no ambiente a biblioteca Allegro, para isso disponibilizamos esse link: https://www.youtube.com/watch?v=Dz-RbYk3zJo
-	
-Além da compilação, para o jogo funcionar é fundamental que o Zelda.exe esteja na mesma pasta que "allegro-5.0.10-monolith-mt.dll" e "allegro-5.0.10-monolith-mt-debug.dll", além da pasta assets, pois essa carrega vários arquivos fundamentais para o jogo.
+To play the game you can download the code and go into the "Jogar" folder, in there is the .exe to play it. In adittion to that, in order to play the game the main select button is enter and to move the character you need to use the keyboard's arrow keys. Use X to attack with your sword and Z to... well... you'll see. Use ESC to pause and save
 
-Como Jogar:
-	A movimentação do personagem e nos menus é dada usando as setas do teclado, ataques utilizam das teclas X (espada) e Z (arco, mas antes tem que encontrar ele)
-	Para você selecionar algo, bem como dar "start" no menu de start e continuar após morrer ou ganhar, aperte ENTER
-	E para cancelar ou voltar nos menus, assim como usar o PAUSE do jogo, aperte ESC
-	O jogo salva automaticamente quando se aperta ESC
-	Você também pode usar sua espada para se defender de projéteis inimigos
-	
+The game was written using the CodeBlocks editor, you can edit it via zelda.cbp or use the sourcecode available
+
+## Portuguese
+Zelda UFMG é um jogo baseado nos jogos da serie Zelda, onde o jogador está atrasado para sua prova e precisa se enfrentar seu professor para passar na matéria.
+
+Para jogar você baixar o código e ir na pasta "Jogar" onde tem um executável jogavel. Em adição a isso, para jogar o jogo o botão de selecionar principal é o enter e para mover o seu personagem use as setas do seu teclado. User X para atacar com a sua espada e Z para... bem... você verá. Use ESC para pausar e salvar
+
+O jogo foi escrito usando o editor CodeBlocks, você pode edita-lo via zelda.cbp ou usar o sourcecode disponivel
